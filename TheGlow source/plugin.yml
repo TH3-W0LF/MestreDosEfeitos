@@ -1,0 +1,40 @@
+name: TheGlow
+version: '1.2.5-STABLE'
+main: xshyo.us.theglow.TheGlow
+description: Glow cosmetics for donors
+author: xShyo_
+website: store.xshyo.us
+api-version: '1.16'
+folia-supported: true
+
+softdepend:
+  - PlaceholderAPI
+  - HeadDatabase
+  - ItemsAdder
+  - Oraxen
+  - TAB
+  - GSit
+  - LibsDisguises
+
+permissions:
+  theglow.help:
+    default: op
+    description: "View help message"
+  theglow.reload:
+    default: op
+    description: "With this command you can reload the configuration files."
+  theglow.removeall:
+    default: op
+    description: "Completely eliminate a player."
+  theglow.set:
+    default: op
+    description: "Set a glow to an online or offline player"
+  theglow.unset:
+    default: op
+    description: "Deactivate your glow to the player"
+  theglow.toggle:
+    default: op
+    description: "Alternate your equipped glow"
+
+
+

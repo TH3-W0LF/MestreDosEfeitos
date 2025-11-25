@@ -1,0 +1,15 @@
+name: MestreDosEfeitos
+version: 2.0
+main: com.seunome.mestredosfx.MestreDosEfeitos
+api-version: 1.21
+depend: [ItemsAdder]
+
+commands:
+  efeitos:
+    description: Abre o menu de efeitos
+  meffeitos:
+    description: Comando administrativo
+
+permissions:
+  mestredosfx.admin:
+    default: op

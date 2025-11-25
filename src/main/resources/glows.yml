@@ -1,0 +1,275 @@
+# ===========================================
+# Mestre Dos Efeitos - Configuração de Glows
+# ===========================================
+
+# Título do menu de glows
+menu-title: "<gradient:yellow:gold>🌟 Glows</gradient>"
+
+# Configurações gerais dos glows
+settings:
+  # Título padrão do menu (se não especificado acima)
+  default-menu-title: "<gradient:yellow:gold>🌟 Glows</gradient>"
+  
+  # Ícone padrão para glows não configurados
+  default-icon: "ENCHANTED_BOOK"
+  
+  # Configuração do Rainbow Glow
+  rainbow:
+    # Intervalo de tempo para mudar de cor (em segundos)
+    # Mínimo recomendado: 0.1 segundos (10 ticks)
+    # Valor padrão: 3.0 segundos (60 ticks)
+    # Valores menores podem causar lag em servidores com muitos players
+    change-interval: 3.0
+
+# Configuração individual de cada glow (TODAS as 16 cores do Minecraft)
+# item: Pode ser um material do Minecraft (ex: "DIAMOND") ou um custom item do ItemsAdder (ex: "itemsadder:meu_item")
+# Se não especificado, tentará usar o custom item padrão "mestredosfx:glow_{glowId}" ou PAPER como fallback
+# glow: true/false - Ativa o efeito de brilho de encantamento no item (padrão: false)
+# slot: Número do slot no inventário (0-53). Se não especificado, usa slot automático
+glows:
+  black:
+    display_name: "<black><b>Black</b></black>"
+    item: "BLACK_CONCRETE" # Material do Minecraft ou custom item do ItemsAdder
+    glow: false # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>Tão escuro e denso quanto um</gray>"
+      - "<black>buraco negro</black> <gray>na imensidão do espaço.</gray>"
+  
+  dark_blue:
+    display_name: "<dark_blue><b>Dark Blue</b></dark_blue>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>Mergulhe nas profundezas inexploradas</gray>"
+      - "<gray>do</gray> <dark_blue>oceano abissal</dark_blue><gray>.</gray>"
+  
+  dark_green:
+    display_name: "<dark_green><b>Dark Green</b></dark_green>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A essência vital das</gray>"
+      - "<dark_green>florestas ancestrais</dark_green> <gray>e esquecidas.</gray>"
+  
+  dark_aqua:
+    display_name: "<dark_aqua><b>Dark Aqua</b></dark_aqua>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>O frio cortante das águas nas</gray>"
+      - "<dark_aqua>cavernas glaciais</dark_aqua><gray>.</gray>"
+  
+  dark_red:
+    display_name: "<dark_red><b>Dark Red</b></dark_red>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A fúria silenciosa de um</gray>"
+      - "<dark_red>vulcão prestes a despertar</dark_red><gray>.</gray>"
+  
+  dark_purple:
+    display_name: "<dark_purple><b>Dark Purple</b></dark_purple>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>Segredos ocultos na dimensão</gray>"
+      - "<gray>do</gray> <dark_purple>vazio infinito</dark_purple><gray>.</gray>"
+  
+  gold:
+    display_name: "<gold><b>Gold</b></gold>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>O resplendor eterno da</gray>"
+      - "<gold>coroa dos deuses</gold><gray>.</gray>"
+  
+  gray:
+    display_name: "<gray><b>Gray</b></gray>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A firmeza inabalável de uma</gray>"
+      - "<gray>fortaleza de pedra</gray><gray>.</gray>"
+  
+  dark_gray:
+    display_name: "<dark_gray><b>Dark Gray</b></dark_gray>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>Como a fumaça densa após a</gray>"
+      - "<dark_gray>batalha final</dark_gray><gray>.</gray>"
+  
+  blue:
+    display_name: "<blue><b>Blue</b></blue>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A serenidade do</gray> <blue>horizonte</blue>"
+      - "<gray>onde o mar toca o céu.</gray>"
+  
+  green:
+    display_name: "<green><b>Green</b></green>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>O trevo da sorte brotando</gray>"
+      - "<gray>na</gray> <green>primavera eterna</green><gray>.</gray>"
+  
+  aqua:
+    display_name: "<aqua><b>Aqua</b></aqua>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A pureza cristalina de um</gray>"
+      - "<aqua>diamante lapidado</aqua><gray>.</gray>"
+  
+  red:
+    display_name: "<red><b>Red</b></red>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A chama ardente que</gray>"
+      - "<red>nunca se apaga</red><gray>.</gray>"
+  
+  light_purple:
+    display_name: "<light_purple><b>Light Purple</b></light_purple>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>O pó mágico de um</gray>"
+      - "<light_purple>sonho encantado</light_purple><gray>.</gray>"
+  
+  yellow:
+    display_name: "<yellow><b>Yellow</b></yellow>"
+    item: "PAPER" # Material do Minecraft ou custom item do ItemsAdder
+    lore:
+      - "<gray>A energia vibrante de um</gray>"
+      - "<yellow>raio de sol</yellow> <gray>ao amanhecer.</gray>"
+  
+  white:
+    display_name: "<white><b>White</b></white>"
+    item: "WHITE_CONCRETE" # Material do Minecraft ou custom item do ItemsAdder
+    glow: false # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>Brilho mais puro que as</gray>"
+      - "<white>nuvens celestiais</white> <gray>do Olympo.</gray>"
+  
+  # Cores adicionais (aliases visuais)
+  pink:
+    display_name: "<light_purple><b>Pink</b></light_purple>"
+    item: "PINK_CONCRETE" # Material do Minecraft ou custom item do ItemsAdder
+    glow: false # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>Doce como uma</gray>"
+      - "<light_purple>flor de cerejeira</light_purple> <gray>na primavera.</gray>"
+  
+  cyan:
+    display_name: "<aqua><b>Cyan</b></aqua>"
+    item: "CYAN_CONCRETE" # Material do Minecraft ou custom item do ItemsAdder
+    glow: false # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>Frescor do</gray>"
+      - "<aqua>oceano tropical</aqua> <gray>ao entardecer.</gray>"
+  
+  orange:
+    display_name: "<gold><b>Orange</b></gold>"
+    item: "ORANGE_CONCRETE" # Material do Minecraft ou custom item do ItemsAdder
+    glow: false # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>Energia vibrante do</gray>"
+      - "<gold>pôr do sol dourado</gold><gray>.</gray>"
+  
+  purple:
+    display_name: "<light_purple><b>Purple</b></light_purple>"
+    item: "PURPLE_CONCRETE" # Material do Minecraft ou custom item do ItemsAdder
+    glow: false # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>Mistério e magia das</gray>"
+      - "<light_purple>galáxias distantes</light_purple><gray>.</gray>"
+  
+  # Glow especial: Rainbow (alterna entre todas as cores)
+  rainbow:
+    display_name: "<rainbow><b>Rainbow</b></rainbow>"
+    item: "PRISMARINE_CRYSTALS" # Material do Minecraft ou custom item do ItemsAdder
+    glow: true # true = item brilha como encantado, false = sem brilho
+    slot: -1 # Slot do inventário (0-53), -1 para automático
+    lore:
+      - "<gray>O arco-íris completo que</gray>"
+      - "<rainbow>muda de cor magicamente</rainbow><gray>!</gray>"
+  
+  # Efeitos Custom (devem ser definidos também na seção custom-effects abaixo)
+  # Exemplo: Efeito de Natal
+  natal:
+    display_name: "<red><b>Natal</b></red>"
+    item: "REDSTONE_BLOCK"
+    glow: false
+    slot: -1
+    lore:
+      - "<gray>Espírito natalino que</gray>"
+      - "<red>alterna entre vermelho e verde</red><gray>!</gray>"
+  
+  # Exemplo: Efeito de Halloween
+  halloween:
+    display_name: "<gold><b>Halloween</b></gold>"
+    item: "JACK_O_LANTERN"
+    glow: false
+    slot: -1
+    lore:
+      - "<gray>Assustador e mágico,</gray>"
+      - "<gold>alterna entre laranja e roxo</gold><gray>!</gray>"
+  
+  # Exemplo: Efeito Brasil
+  brasil:
+    display_name: "<green><b>Brasil</b></green>"
+    item: "GREEN_CONCRETE"
+    glow: false
+    slot: -1
+    lore:
+      - "<gray>Orgulho nacional que</gray>"
+      - "<green>alterna entre verde, amarelo e azul</green><gray>!</gray>"
+
+# ===========================================
+# Efeitos Custom (Natal, Halloween, etc)
+# ===========================================
+# Permite criar efeitos que alternam entre múltiplas cores
+# 
+# Exemplo de uso:
+# - natal: Alterna entre vermelho e verde
+# - halloween: Alterna entre laranja e roxo
+# - brasil: Alterna entre verde, amarelo e azul
+#
+# Formato:
+# custom-effects:
+#   nome_do_efeito:
+#     display-name: "Nome exibido no menu"
+#     delay: 1.0  # Tempo em segundos entre mudanças de cor
+#     colors:
+#       - RED
+#       - GREEN
+#       - etc...
+#
+# IMPORTANTE: Os nomes das cores devem ser em MAIÚSCULAS e usar underscore (_)
+# Cores válidas: RED, DARK_RED, GOLD, YELLOW, GREEN, DARK_GREEN, AQUA, DARK_AQUA,
+#                BLUE, DARK_BLUE, PURPLE, DARK_PURPLE, LIGHT_PURPLE, WHITE, GRAY,
+#                DARK_GRAY, BLACK
+#
+# Depois de criar aqui, adicione também na seção "glows:" acima para aparecer no menu
+custom-effects:
+  # Exemplo: Efeito de Natal (Vermelho e Verde)
+  natal:
+    display-name: "<red><b>Natal</b></red>"
+    delay: 1.0  # Muda de cor a cada 1 segundo
+    colors:
+      - RED
+      - GREEN
+  
+  # Exemplo: Efeito de Halloween (Laranja e Roxo)
+  halloween:
+    display-name: "<gold><b>Halloween</b></gold>"
+    delay: 0.8  # Muda de cor a cada 0.8 segundos
+    colors:
+      - GOLD
+      - DARK_PURPLE
+      - BLACK
+  
+  # Exemplo: Efeito Brasil (Verde, Amarelo e Azul)
+  brasil:
+    display-name: "<green><b>Brasil</b></green>"
+    delay: 1.5  # Muda de cor a cada 1.5 segundos
+    colors:
+      - GREEN
+      - YELLOW
+      - BLUE

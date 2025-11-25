@@ -1,0 +1,102 @@
+MESSAGES:
+  GUI:
+    # UnEquip
+    UN_EQUIP: "&cYour glow has been disabled!"
+    UN_EQUIP_EMPTY: "&cYou don't have any glow equipped"
+    # GlowMenu
+    NO_PERMISSION: "&cYou don't have permission to use this glow"
+    INVALID_COLOR: "&cThis glow has an invalid color."
+    ALREADY_SELECTED: "&eYou already have this glow equipped"
+    SELECTED: "&aYou have selected the glow {1}"
+
+    INVISIBILITY: "" # "&cGlow will not be applied because you have the invisibility effect."
+    GAMEMODE: "" # "&cGlow will not be applied because you are in spectator mode."
+    OFF: "" # "#&cThe glow is not visible because it is disabled."
+    DISGUISE: "" # "&cThe glow cannot be applied because you are disguised."
+    GSIT: "" # "&cThe glow cannot be applied because you are in a pose."
+    #Global
+    COUNTDOWN: '&fYou must wait &a{1} &fseconds before clicking again.'
+
+  COMMANDS:
+
+    NOPERMS: '&cYou don''t have permission {2} to use the command.'
+    NOPERMS_LOGGER: '&cUser {1} does not have permission {2}'
+    HELP_CONSOLE: |-
+      &7
+      &e&l BASIC CONSOLE COMMANDS
+      &7
+      &8 » &e/{cmd} reload &8- &fReloads the configuration
+      &8 » &e/{cmd} help &8- &fView help message
+      &8 » &e/{cmd} unset <player> &8- &fDisable glow to a player
+      &8 » &e/{cmd} set <player> <value> &8- &fSet to players glow
+      &8 » &e/{cmd} removeall <player> &8- &fDelete any player information
+      &7
+    HELP:
+      - '&e&lBASIC COMMANDS'
+      - '&7'
+      - '&8 » &e/{shortenedcmd} &8- &fOpen the glow menu'
+      - '&7'
+      - '&8 » &e/{cmd} help &8- &fView help message'
+      - '&8 » &e/{cmd} reload &8- &fReload the configuration'
+      - '&8 » &e/{cmd} remove <type> <player> &8- &fDeletes specific player information.'
+      - '&8 » &e/{cmd} set <player> <value> &8- &fSet to players glows or specific configurations'
+      - '&8 » &e/{cmd} removeall <player> &8- &fDelete any player information'
+
+    HELP_USAGE: '&cCorrect usage: /{cmd} help (page)'
+    USAGE: '&cNo such command. please type /{cmd} help for more info'
+
+    RELOAD: '&aAll YML files have been successfully reset.'
+    RELOAD_COOLDOWN: '&aYou must wait {1} before reloading the configuration.'
+
+    # Shortened
+    SHORTENED_OPEN: '&aOpen the glow menu'
+    SHORTENED_OPEN_CONSOLE: '&cOnly players can execute this command.'
+
+    # Info
+    INFO_USAGE: "&cCorrect usage: /{cmd} info <player>"
+    INFO_DATA_NOT_FOUND: "&cNo player information found {1}"
+    INFO: |-
+      &7
+      &8 ■ &fPlayer information &a{1}
+      &7
+      &8 ■ &fCurrent: &7({2}) &fList: &7{3} &fEnabled: {4}
+      &8 ■ &fMenu Order &a&l{5} &8- &a&l{6}
+      &7
+
+    # Set
+    SET_USAGE: "&cCorrect usage: /{cmd} set <player> <id>"
+    SET_INVALID_PLAYER: "&cPlayer {1} is not online."
+    SET_ALREADY: "&ePlayer {1} already has glow {2} equipped."
+    SET_NONE: "&cGlow disabled for player {1}."
+    SET_VALID_COLORS: "&cThe color {1} is not valid."
+    SET: "&aGlow applied to player {1} with color {2}."
+
+    # OpenMenu
+    OPEN_MENU_USAGE: "&cUso: /{cmd} openmenu <target> <menuName>"
+    OPEN_MENU_TARGET_INVALID: "&cThe specified player is not online."
+    OPEN_MENU: "&aOpening the menu {1} to {2}"
+    OPEN_MENU_NOT_FOUND: "&cThe menu you are trying to open does not exist."
+
+    # Toggle
+    TOGGLE_EMPTY: "&cYou don't have any glow equipped to alternate"
+    TOGGLE: "&cYou have alternated your brightness to {1}"
+    TOGGLE_NO_PLAYER: "&cThe specified player does not exist"
+
+    # UnSet
+    UNSET_USAGE: "&cCorrect usage: /{cmd} unset <player>"
+    UNSET_INVALID_PLAYER: "&cPlayer {1} is not online."
+    UNSET: "&aYou have removed the glow from the player {1}."
+    UNSET_NO_GLOW: "&cPlayer {1} does not have any glow equipped."
+
+    # RemoveALL
+    REMOVEALL: '&cAll glows for {1} have been removed.'
+    REMOVEALL_USAGE: '&cCorrect usage: /{cmd} removeall <player>.'
+    REMOVEALL_INVALID_DATA: '&cNo information found with the name {1}'
+
+    REMOVE_CONFIRM:
+      USAGE: '&aAre you sure you want to delete {1}''s data? (yes/no)'
+      SUCCESS: '&aData for player {1} deleted successfully'
+      CANCEL: '&cProcess canceled.'
+
+
+file-version: '3'
