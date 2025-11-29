@@ -212,6 +212,30 @@ public class PhysicalItemBuilder {
     }
 
     /**
+     * Cria o item físico para desbloquear a cor do nick
+     */
+    public static ItemStack createNickColorItem() {
+        ItemStack item = new ItemStack(Material.NAME_TAG);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.displayName(mm.deserialize("<gold>🎨 Desbloqueador de Cor do Nick</gold>"));
+            java.util.List<Component> lore = new java.util.ArrayList<>();
+            lore.add(mm.deserialize("<gray>Use este item para liberar</gray>"));
+            lore.add(mm.deserialize("<gray>a cor do seu nick nos glows.</gray>"));
+            lore.add(mm.deserialize(""));
+            lore.add(mm.deserialize("<yellow>Clique com botão direito</yellow>"));
+            lore.add(mm.deserialize("<yellow>para ativar permanentemente!</yellow>"));
+            meta.lore(lore);
+            meta.getPersistentDataContainer().set(getItemTypeKey(), PersistentDataType.STRING, "nick_color_unlock");
+            if (!meta.hasCustomModelData()) {
+                meta.setCustomModelData(PHYSICAL_ITEM_CUSTOM_MODEL_DATA);
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    /**
      * Verifica se um item é um item físico do plugin
      * Verificação rápida e otimizada - verifica NBT tags primeiro
      */

@@ -47,13 +47,23 @@ public class SQLiteManager {
                 CREATE TABLE IF NOT EXISTS player_effects (
                   uuid TEXT PRIMARY KEY,
                   glow TEXT,
-                  particle TEXT
+                  particle TEXT,
+                  nick_color_unlocked INTEGER DEFAULT 0,
+                  nick_color_enabled INTEGER DEFAULT 0
                 );
                 """;
             
             try (PreparedStatement stmt = conn.prepareStatement(createPlayerEffects)) {
                 stmt.executeUpdate();
             }
+
+            // Garantir colunas extras (em caso de versões antigas do banco)
+            addColumnIfMissing(conn, """
+                ALTER TABLE player_effects ADD COLUMN nick_color_unlocked INTEGER DEFAULT 0
+            """);
+            addColumnIfMissing(conn, """
+                ALTER TABLE player_effects ADD COLUMN nick_color_enabled INTEGER DEFAULT 0
+            """);
 
             // Criar tabela unlocked
             String createUnlocked = """
@@ -82,6 +92,14 @@ public class SQLiteManager {
             }
         } catch (SQLException e) {
             plugin.getLogger().log(Level.SEVERE, "Erro ao fechar conexão do banco de dados", e);
+        }
+    }
+
+    private void addColumnIfMissing(Connection conn, String alterTableSql) {
+        try (PreparedStatement stmt = conn.prepareStatement(alterTableSql)) {
+            stmt.executeUpdate();
+        } catch (SQLException ignored) {
+            // Coluna já existe - ignorar erro
         }
     }
 }

@@ -11,6 +11,8 @@ import com.seunome.mestredosfx.managers.ParticleManager;
 import com.seunome.mestredosfx.hooks.ItemsAdderHook;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 public final class MestreDosEfeitos extends JavaPlugin {
 
     private static MestreDosEfeitos instance;
@@ -20,6 +22,7 @@ public final class MestreDosEfeitos extends JavaPlugin {
     private ParticleManager particleManager;
     private EffectApplier effectApplier;
     private ItemsAdderHook itemsAdderHook;
+    private boolean debugMode;
     
     // Menus (instanciados uma vez para evitar listeners duplicados)
     private com.seunome.mestredosfx.menus.MainMenu mainMenu;
@@ -37,6 +40,10 @@ public final class MestreDosEfeitos extends JavaPlugin {
         
         // Salvar configurações padrão
         saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+        this.debugMode = getConfig().getBoolean("settings.debug-mode", false);
+        configureLogger();
         saveResource("glows.yml", false);
         saveResource("particles.yml", false);
         
@@ -130,6 +137,31 @@ public final class MestreDosEfeitos extends JavaPlugin {
 
     public com.seunome.mestredosfx.config.ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public void debug(String message) {
+        if (debugMode) {
+            getLogger().info("[DEBUG] " + message);
+        }
+    }
+
+    public void debug(String message, Throwable throwable) {
+        if (debugMode) {
+            getLogger().log(Level.WARNING, "[DEBUG] " + message, throwable);
+        }
+    }
+
+    private void configureLogger() {
+        if (debugMode) {
+            getLogger().setLevel(Level.ALL);
+            getLogger().info("Modo debug ativado. Todos os erros serão exibidos no console.");
+        } else {
+            getLogger().setLevel(Level.INFO);
+        }
     }
 }
 

@@ -1,2 +1,0 @@
-VERSION=1.10.14
-DATE=August 16 2023

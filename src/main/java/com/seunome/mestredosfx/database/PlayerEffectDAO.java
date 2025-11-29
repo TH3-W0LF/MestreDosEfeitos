@@ -13,6 +13,8 @@ public class PlayerEffectDAO {
 
     private final MestreDosEfeitos plugin;
     private final SQLiteManager sqliteManager;
+    private static final String COLUMN_NICK_COLOR_UNLOCKED = "nick_color_unlocked";
+    private static final String COLUMN_NICK_COLOR_ENABLED = "nick_color_enabled";
 
     public PlayerEffectDAO(MestreDosEfeitos plugin) {
         this.plugin = plugin;
@@ -196,6 +198,9 @@ public class PlayerEffectDAO {
             for (String particle : allParticles) {
                 unlock(uuid, "particle", particle);
             }
+
+            // Desbloquear cor do nick também
+            unlockNickColor(uuid);
         } catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Erro ao desbloquear todos os efeitos", e);
         }
@@ -216,6 +221,59 @@ public class PlayerEffectDAO {
             }
         } catch (SQLException e) {
             plugin.getLogger().log(Level.SEVERE, "Erro ao resetar jogador", e);
+        }
+    }
+
+    public boolean hasUnlockedNickColor(UUID uuid) {
+        return getBooleanColumn(uuid, COLUMN_NICK_COLOR_UNLOCKED);
+    }
+
+    public boolean isNickColorEnabled(UUID uuid) {
+        return getBooleanColumn(uuid, COLUMN_NICK_COLOR_ENABLED);
+    }
+
+    public void setNickColorEnabled(UUID uuid, boolean enabled) {
+        updateBooleanColumn(uuid, COLUMN_NICK_COLOR_ENABLED, enabled);
+    }
+
+    public void unlockNickColor(UUID uuid) {
+        updateBooleanColumn(uuid, COLUMN_NICK_COLOR_UNLOCKED, true);
+    }
+
+    private boolean getBooleanColumn(UUID uuid, String column) {
+        String sql = "SELECT " + column + " FROM player_effects WHERE uuid = ?";
+        try (Connection conn = sqliteManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, uuid.toString());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(column) == 1;
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Erro ao ler coluna " + column + " do jogador", e);
+        }
+        return false;
+    }
+
+    private void updateBooleanColumn(UUID uuid, String column, boolean value) {
+        String sql = "UPDATE player_effects SET " + column + " = ? WHERE uuid = ?";
+        try (Connection conn = sqliteManager.getConnection()) {
+            ensurePlayerRow(conn, uuid);
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, value ? 1 : 0);
+                stmt.setString(2, uuid.toString());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Erro ao atualizar coluna " + column + " do jogador", e);
+        }
+    }
+
+    private void ensurePlayerRow(Connection conn, UUID uuid) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "INSERT OR IGNORE INTO player_effects (uuid) VALUES (?)")) {
+            stmt.setString(1, uuid.toString());
+            stmt.executeUpdate();
         }
     }
 }

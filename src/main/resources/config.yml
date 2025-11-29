@@ -16,6 +16,9 @@ settings:
   # Desbloquear automaticamente ao usar item físico
   auto-unlock-on-use: true
 
+  # Mostrar logs detalhados no console (stacktraces/debug)
+  debug-mode: true
+
 # Mensagens globais
 messages:
   prefix: "<gradient:aqua:blue>[MestreDosEfeitos]</gradient>"

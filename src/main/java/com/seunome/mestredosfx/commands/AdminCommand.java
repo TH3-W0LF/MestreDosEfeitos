@@ -117,7 +117,7 @@ public class AdminCommand implements CommandExecutor {
             plugin.getLogger().info(sender.getName() + " deu partícula " + effectId + " para " + playerName);
             
         } else {
-            sendMessage(sender, "<red>Tipo inválido. Use 'glow' ou 'particle'</red>");
+            sendMessage(sender, "<red>Tipo inválido. Use 'glow', 'particle' ou 'nickcolor'</red>");
             return true;
         }
 
@@ -308,7 +308,24 @@ public class AdminCommand implements CommandExecutor {
             }
 
             plugin.getLogger().info(sender.getName() + " deu item físico de partícula " + effectId + " (x" + amount + ") para " + playerName);
-            
+        } else if (type.equals("nickcolor")) {
+            ItemStack item = com.seunome.mestredosfx.utils.PhysicalItemBuilder.createNickColorItem();
+            item.setAmount(amount);
+
+            HashMap<Integer, ItemStack> excess = target.getInventory().addItem(item);
+
+            if (excess.isEmpty()) {
+                sendMessage(sender, "<green>Item de desbloqueio de cor do nick dado para <yellow>" + playerName + "</yellow> (x" + amount + ")</green>");
+                com.seunome.mestredosfx.utils.PlayerUtils.sendMessage(target, "<green>Você recebeu o desbloqueador de cor do nick! (x" + amount + ")</green>");
+            } else {
+                sendMessage(sender, "<yellow>Item dado parcialmente. Inventário cheio! (x" + amount + ")</yellow>");
+                com.seunome.mestredosfx.utils.PlayerUtils.sendMessage(target, "<yellow>Seu inventário está cheio! Alguns itens foram dropados.</yellow>");
+                for (ItemStack excessItem : excess.values()) {
+                    target.getWorld().dropItemNaturally(target.getLocation(), excessItem);
+                }
+            }
+
+            plugin.getLogger().info(sender.getName() + " deu item nickcolor (x" + amount + ") para " + playerName);
         } else {
             sendMessage(sender, "<red>Tipo inválido. Use 'glow' ou 'particle'</red>");
             return true;

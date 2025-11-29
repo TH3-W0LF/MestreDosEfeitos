@@ -14,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -139,6 +140,20 @@ public class PhysicalItemListener implements Listener {
             removeItemFromInventory(player, item, isMainHand);
 
             player.playSound(player.getLocation(), org.bukkit.Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+        } else if (itemType.equals("nick_color_unlock")) {
+            UUID uuid = player.getUniqueId();
+            if (dao.hasUnlockedNickColor(uuid)) {
+                PlayerUtils.sendMessage(player, "<yellow>Você já desbloqueou a cor do nick!</yellow>");
+                return;
+            }
+
+            dao.unlockNickColor(uuid);
+            dao.setNickColorEnabled(uuid, true);
+            glowManager.updateNickColorPreference(player, true);
+            PlayerUtils.sendMessage(player, "<green>Você liberou a cor do nick! Ativada automaticamente.</green>");
+
+            removeItemFromInventory(player, item, isMainHand);
+            player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.2f);
         }
     }
     
