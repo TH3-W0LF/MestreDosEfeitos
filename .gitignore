@@ -1,6 +1,31 @@
+# Build
 target/
+*.jar
+!libs/*.jar
+
+# IDE
 .idea/
 .vscode/
 *.iml
-*.log
+*.classpath
+*.project
+.settings/
 
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven (mantido apenas para referência, não commitado)
+pom.xml
+
+# Sensitive
+*.key
+*.keystore
+config.yml
+
+# ProtocolLib JAR local (não commitado)
+libs/ProtocolLib.jar

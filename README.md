@@ -1,104 +1,214 @@
-# Mestre Dos Efeitos
+# MestreDosEfeitos
 
-Plugin standalone de partículas e glows para Minecraft (Paper/Spigot).
+> Plugin de Efeitos Especiais para Minecraft - Desenvolvido com exclusividade para **DrakkarMc** e toda sua rede
 
-## Funcionalidades
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4-green)
+![License](https://img.shields.io/badge/License-Private-red)
 
-- **Sistema de Partículas**: Mais de 70 tipos de partículas disponíveis com efeito Helix
-- **Sistema de Glows**: 16 cores de glow desbloqueáveis por níveis
-- **Menus Interativos**: Interface gráfica para seleção de efeitos
-- **Persistência**: Efeitos salvos entre relogins
+---
 
-## Comandos
+## 📋 Sobre o Projeto
 
-- `/efeitos` - Abre o menu principal
-- `/efeitos particulas` - Abre o menu de partículas
-- `/efeitos glow` - Abre o menu de glows
-- `/efeitos glow disable` - Desativa o glow atual
-- `/efeitos reload` - Recarrega as configurações (requer permissão)
+Plugin premium de efeitos visuais para servidores Minecraft Paper/Spigot, desenvolvido com tecnologia avançada de ProtocolLib para oferecer a melhor experiência visual possível.
 
-## Permissões
+### ✨ Funcionalidades Principais
 
-- `mestredosefeitos.usar` - Permissão para usar o comando principal (padrão: true)
-- `mestredosefeitos.particulas` - Permissão para usar partículas (padrão: true)
-- `mestredosefeitos.glow` - Permissão para usar glow (padrão: true)
-- `mestredosefeitos.reload` - Permissão para recarregar (padrão: op)
-- `mestredosefeitos.*` - Todas as permissões
+- 🌈 **Sistema de Glows Coloridos**: 16+ cores disponíveis com efeitos especiais
+- ✨ **Sistema de Partículas**: Mais de 70 tipos de partículas com efeito Helix
+- 🎨 **Efeito Rainbow**: Glow que alterna entre múltiplas cores automaticamente
+- 💾 **Persistência Completa**: Efeitos salvos entre relogins
+- 🎯 **Menus Interativos**: Interface gráfica intuitiva para seleção de efeitos
+- 🔄 **Sistema de Unlock**: Desbloqueio progressivo de efeitos
+- 🎁 **Itens Físicos**: Sistema de itens consumíveis para desbloquear efeitos
 
-## Configuração
+---
 
-### particles.yml
-- `give-particle-item-on-join`: Define se o item de partículas é dado automaticamente no join
-- `particle-item-slot`: Slot do inventário onde o item será colocado
-- `menu-title`: Título do menu de partículas
-- `messages.*`: Mensagens do sistema de partículas
+## 🎮 Comandos
+
+| Comando | Descrição | Permissão |
+|---------|-----------|-----------|
+| `/efeitos` | Abre o menu principal de efeitos | `mestredosfx.usar` |
+| `/efeitos glow <id>` | Aplica um glow específico | `mestredosfx.glow` |
+| `/efeitos glow off` | Desativa o glow atual | `mestredosfx.glow` |
+| `/efeitos particulas` | Abre o menu de partículas | `mestredosfx.particulas` |
+| `/meffeitos reload` | Recarrega as configurações | `mestredosfx.admin.reload` |
+| `/meffeitos giveitem <tipo> <jogador> <id> [quantidade]` | Dá item físico para jogador | `mestredosfx.admin.giveitem` |
+
+---
+
+## 🔧 Tecnologias Utilizadas
+
+- **Java 21**: Linguagem de programação
+- **Paper/Spigot API 1.21.4**: API do Minecraft Server
+- **ProtocolLib**: Manipulação avançada de pacotes de rede
+- **PlaceholderAPI**: Integração com plugins de chat (LeafTags/TAB)
+- **ItemsAdder**: Suporte a itens customizados
+- **SQLite**: Banco de dados para persistência
+- **MiniMessage**: Formatação avançada de texto
+
+---
+
+## ⚙️ Instalação
+
+1. Baixe a versão mais recente do plugin
+2. Coloque o arquivo `.jar` na pasta `plugins/` do seu servidor
+3. Certifique-se de ter os seguintes plugins instalados:
+   - **ProtocolLib** (obrigatório)
+   - **PlaceholderAPI** (recomendado)
+   - **ItemsAdder** (opcional, para itens customizados)
+4. Reinicie o servidor
+5. Configure os arquivos em `plugins/MestreDosEfeitos/`
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+src/main/java/com/seunome/mestredosfx/
+├── commands/          # Sistema de comandos
+├── database/          # Gerenciamento de banco de dados SQLite
+├── hooks/             # Integrações com outros plugins
+├── listeners/         # Event listeners do Bukkit
+├── managers/          # Gerenciadores principais
+│   ├── glow/          # Sistema de glows
+│   │   ├── GlowEffect.java
+│   │   ├── GlowPacketManager.java  # ProtocolLib integration
+│   │   └── TeamNameGenerator.java
+│   ├── GlowManager.java
+│   └── ParticleManager.java
+├── menus/             # Interfaces gráficas (menus)
+└── utils/             # Utilitários e helpers
+```
+
+---
+
+## 🔐 Permissões
+
+### Permissões Principais
+
+- `mestredosfx.*` - Todas as permissões
+- `mestredosfx.usar` - Usar o comando principal (padrão: `true`)
+- `mestredosfx.glow` - Usar sistema de glows (padrão: `true`)
+- `mestredosfx.particulas` - Usar sistema de partículas (padrão: `true`)
+
+### Permissões Administrativas
+
+- `mestredosfx.admin.*` - Todas as permissões administrativas
+- `mestredosfx.admin.reload` - Recarregar configurações
+- `mestredosfx.admin.giveitem` - Dar itens físicos para jogadores
+
+---
+
+## 📖 Configuração
 
 ### glows.yml
-- `settings.unlock-step`: Intervalo de níveis para desbloquear novas cores (padrão: 100)
-- `settings.menu-title`: Título do menu de glows
-- `colors.*`: Configuração de cada cor de glow
-  - `display-name`: Nome exibido (suporta MiniMessage)
-  - `material`: Material do ícone
-  - `team-color`: Cor do ChatColor para o glow
-  - `required-reinc-level`: Nível necessário para desbloquear
-  - `description`: Lista de descrições (suporta MiniMessage)
 
-## API
+```yaml
+settings:
+  rainbow:
+    change-interval: 3.0  # Intervalo em segundos para mudança de cor
+  menu-title: "<gradient:aqua:blue>🌟 Glows Disponíveis</gradient>"
 
-### Partículas
-
-```java
-MestreDosEfeitos plugin = MestreDosEfeitos.getInstance();
-ParticlesManager particlesManager = plugin.getParticlesManager();
-
-// Abrir menu
-particlesManager.openMenu(player);
-
-// Aplicar efeito
-particlesManager.applyEffect(player, ParticleEffectType.HELIX);
-
-// Remover efeito
-particlesManager.removeEffect(player);
+glows:
+  rainbow:
+    display-name: "<gradient:red:orange:yellow:green:blue:purple>Rainbow</gradient>"
+    required-level: 0
+  
+  red:
+    display-name: "<red>Vermelho</red>"
+    material: RED_WOOL
+    team-color: RED
+    required-level: 100
 ```
 
-### Glows
+### particles.yml
 
-```java
-MestreDosEfeitos plugin = MestreDosEfeitos.getInstance();
-GlowManager glowManager = plugin.getGlowManager();
-
-// Abrir menu
-glowManager.openMenu(player);
-
-// Aplicar glow
-GlowColor color = glowManager.getColorById("dourado");
-glowManager.applyGlow(player, color, true);
-
-// Desativar glow
-glowManager.disableGlow(player, true);
-
-// Verificar se está desbloqueado
-boolean unlocked = glowManager.isUnlocked(player, color);
-
-// Definir nível máximo (para desbloquear cores)
-glowManager.setMaxLevel(player, 500);
-
-// Desbloquear todas as cores
-glowManager.unlockAllColors(player, true);
+```yaml
+settings:
+  menu-title: "<gradient:aqua:blue>✨ Partículas Disponíveis</gradient>"
+  
+particles:
+  - id: "hearts"
+    display-name: "<red>Coracões</red>"
+    material: RED_DYE
 ```
 
-## Compilação
+---
 
-```bash
-mvn clean package
-```
+## 🌟 Recursos Avançados
 
-O arquivo JAR será gerado em `target/MestreDosEfeitos-1.0.0.jar`
+### Sistema de Glow com ProtocolLib
 
-## Notas
+O plugin utiliza ProtocolLib para manipulação direta de pacotes de rede, garantindo:
+- ✅ **Performance Otimizada**: Sem lag em servidores com muitos jogadores
+- ✅ **Persistência Visual**: Glow não desaparece ao andar/correr/se agachar
+- ✅ **Compatibilidade**: Funciona com plugins de chat (LeafTags/TAB)
+- ✅ **Efeito Rainbow**: Alternância suave entre cores sem flicker
 
-- Este plugin foi extraído do ItemStatsTracker para uso standalone
-- Requer Paper/Spigot 1.21.1 ou superior
-- Suporta MiniMessage para formatação de texto avançada
-- Os glows são baseados no sistema de Scoreboard Teams do Bukkit
+### Integração com PlaceholderAPI
 
+- Suporte completo para placeholders do LeafTags
+- Herança automática de prefixos e sufixos do servidor
+- Preservação da formatação original do rank
+
+---
+
+## 🐛 Troubleshooting
+
+### O glow desaparece quando o jogador anda
+
+✅ **Solução**: Certifique-se de que o ProtocolLib está instalado e atualizado.
+
+### Erro ao compilar
+
+✅ **Solução**: Certifique-se de ter:
+- Java 21 ou superior
+- Maven instalado
+- Todas as dependências no `pom.xml`
+
+### Prefixo/sufixo não aparecem
+
+✅ **Solução**: Instale o PlaceholderAPI e certifique-se de que o LeafTags está configurado corretamente.
+
+---
+
+## 📞 Contato e Suporte
+
+### 🔗 Links
+
+- **Site Oficial**: [drakkarmc.com.br](https://drakkarmc.com.br)
+- **Discord**: [mestree.dev](https://discord.com/users/mestree.dev)
+
+### 👨‍💻 Desenvolvedor
+
+**Desenvolvedor JAVA MestreBR**
+
+---
+
+## 📝 Licença
+
+> ⚠️ **Este projeto é propriedade exclusiva de DrakkarMc e sua rede.**
+> 
+> Todo o código fonte está protegido e destinado apenas para uso interno do servidor.
+> 
+> **É proibida a reprodução, distribuição ou uso não autorizado deste código.**
+
+---
+
+## 🎯 Créditos
+
+- **Desenvolvido por**: MestreBR (Desenvolvedor JAVA)
+- **Exclusivo para**: DrakkarMc e toda sua rede
+- **Versão**: 1.0.0
+- **Data**: 2024
+
+---
+
+<div align="center">
+
+**Desenvolvido com ❤️ para DrakkarMc**
+
+[![DrakkarMc](https://img.shields.io/badge/DrakkarMc-Official-blue)](https://drakkarmc.com.br)
+
+</div>

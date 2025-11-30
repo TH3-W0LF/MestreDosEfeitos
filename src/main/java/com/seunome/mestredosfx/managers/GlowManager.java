@@ -3,6 +3,7 @@ package com.seunome.mestredosfx.managers;
 import com.seunome.mestredosfx.MestreDosEfeitos;
 import com.seunome.mestredosfx.database.PlayerEffectDAO;
 import com.seunome.mestredosfx.managers.glow.GlowEffect;
+import com.seunome.mestredosfx.managers.glow.GlowPacketManager;
 import com.seunome.mestredosfx.managers.glow.TeamNameGenerator;
 import com.seunome.mestredosfx.utils.PlayerUtils;
 import org.bukkit.ChatColor;
@@ -27,13 +28,16 @@ public class GlowManager {
     private final Map<String, ChatColor> glowColors;
     private final Scoreboard mainScoreboard;
     private List<ChatColor> rainbowColors;
-    private final Map<UUID, Boolean> nickColorCache = new ConcurrentHashMap<>();
 
     private final Map<String, GlowEffect> glowEffects;
     private final Map<UUID, String> playerTeamNames;
     private final TeamNameGenerator teamNameGenerator;
+    private GlowPacketManager packetManager;
 
     private final Map<UUID, Long> playerJoinTime;
+    
+    // Mapa para rastrear se é a primeira aplicação de glow (para usar Mode 0 ou Mode 2)
+    private final Map<UUID, Boolean> firstGlowApplication = new ConcurrentHashMap<>();
 
     public GlowManager(MestreDosEfeitos plugin) {
         this.plugin = plugin;
@@ -45,35 +49,19 @@ public class GlowManager {
         this.playerTeamNames = new ConcurrentHashMap<>();
         this.teamNameGenerator = new TeamNameGenerator();
         this.playerJoinTime = new ConcurrentHashMap<>();
+        
+        // Inicializar GlowPacketManager (ProtocolLib)
+        try {
+            this.packetManager = new GlowPacketManager(plugin);
+        } catch (Exception e) {
+            plugin.getLogger().warning("ProtocolLib não disponível! O sistema de Glow via ProtocolLib não funcionará: " + e.getMessage());
+            this.packetManager = null;
+        }
 
         initializeGlowColors();
         initializeRainbowColors();
         initializeGlowEffects();
         loadActiveGlows();
-    }
-
-    // --- GERENCIAMENTO DE CACHE DE PREFERÊNCIAS ---
-
-    public void loadPlayerPreferences(Player player) {
-        if (player == null) {
-            return;
-        }
-        boolean unlocked = dao.hasUnlockedNickColor(player.getUniqueId());
-        boolean enabled = dao.isNickColorEnabled(player.getUniqueId());
-        nickColorCache.put(player.getUniqueId(), unlocked && enabled);
-    }
-
-    public void updateNickColorPreference(Player player, boolean enabled) {
-        if (player == null) {
-            return;
-        }
-        UUID uuid = player.getUniqueId();
-        boolean unlocked = dao.hasUnlockedNickColor(uuid);
-        nickColorCache.put(uuid, unlocked && enabled);
-
-        if (hasGlow(player)) {
-            refreshActiveGlow(player);
-        }
     }
 
     // --- EVENTOS DE JOIN / QUIT ---
@@ -90,7 +78,6 @@ public class GlowManager {
         }
 
         playerJoinTime.put(player.getUniqueId(), System.currentTimeMillis());
-        loadPlayerPreferences(player);
 
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             if (player == null || !player.isOnline()) {
@@ -126,16 +113,80 @@ public class GlowManager {
         }
 
         playerJoinTime.remove(uuid);
-        nickColorCache.remove(uuid);
+        firstGlowApplication.remove(uuid);
+        
+        // Limpar no GlowPacketManager (enviar removeGlow para todos os observadores)
+        if (packetManager != null) {
+            Player playerQuitting = plugin.getServer().getPlayer(uuid);
+            if (playerQuitting != null && playerQuitting.isOnline()) {
+                for (Player observer : plugin.getServer().getOnlinePlayers()) {
+                    if (observer != null && observer.isOnline() && observer.canSee(playerQuitting)) {
+                        try {
+                            packetManager.removeGlow(playerQuitting, observer);
+                        } catch (Exception ignored) {}
+                    }
+                }
+                // Limpar o rastreamento da entidade
+                packetManager.clearPlayer(playerQuitting);
+            }
+        }
     }
 
-    // --- LÓGICA DE APLICAÇÃO ---
+    // --- LÓGICA DE APLICAÇÃO (PROTOCOLLIB) ---
 
     private void applyGlowWithColor(Player player, ChatColor color) {
         if (color == null || player == null || !player.isOnline()) {
             return;
         }
 
+        // Se ProtocolLib não estiver disponível, usar fallback (Bukkit API antiga)
+        if (packetManager == null) {
+            applyGlowWithColorFallback(player, color);
+            return;
+        }
+
+        try {
+            UUID playerUuid = player.getUniqueId();
+            
+            // SEMPRE manter a cor original do nick (simplificado - sem toggle)
+            boolean keepOriginalColor = true;
+            
+            // Verificar se o glow já existe
+            boolean hasActiveGlow = packetManager.hasGlow(player);
+            
+            // Enviar pacotes para todos os observadores
+            for (Player observer : plugin.getServer().getOnlinePlayers()) {
+                if (observer == null || !observer.isOnline() || !observer.canSee(player)) {
+                    continue;
+                }
+                
+                try {
+                    if (hasActiveGlow) {
+                        // Glow já existe: usar refreshGlow (Mode 2 - Update) para evitar flicker
+                        packetManager.refreshGlow(player, observer, color, keepOriginalColor);
+                    } else {
+                        // Glow não existe: criar novo (Mode 0 - Create)
+                        packetManager.setGlow(player, observer, color, keepOriginalColor);
+                    }
+                } catch (Exception e) {
+                    plugin.debug("Erro ao enviar pacote para " + observer.getName(), e);
+                }
+            }
+            
+            // Marcar como primeira aplicação após criar o glow (apenas uma vez, fora do loop)
+            if (!hasActiveGlow) {
+                firstGlowApplication.put(playerUuid, true);
+            }
+            
+        } catch (Exception e) {
+            plugin.debug("Erro ao aplicar glow com ProtocolLib para " + player.getName(), e);
+        }
+    }
+    
+    /**
+     * Fallback para quando ProtocolLib não está disponível (usar API antiga do Bukkit)
+     */
+    private void applyGlowWithColorFallback(Player player, ChatColor color) {
         try {
             if (player.getScoreboard() != mainScoreboard) {
                 player.setScoreboard(mainScoreboard);
@@ -160,19 +211,14 @@ public class GlowManager {
             team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
             team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
 
-            boolean allowColoredNick = player.hasPermission("mestredosfx.namecolor");
-            if (!allowColoredNick) {
-                allowColoredNick = nickColorCache.getOrDefault(player.getUniqueId(), false);
-            }
-            team.setPrefix(allowColoredNick ? "" : ChatColor.WHITE.toString());
+            // Sempre manter o prefixo branco (simplificado - sem toggle)
+            team.setPrefix(ChatColor.WHITE.toString());
 
             if (!team.hasEntry(cleanName)) {
                 team.addEntry(cleanName);
             }
 
-            if (!player.isGlowing()) {
-                player.setGlowing(true);
-            }
+            // NÃO usar player.setGlowing() - remover linha antiga
         } catch (Exception ignored) {
         }
     }
@@ -316,7 +362,6 @@ public class GlowManager {
 
     private void loadActiveGlows() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            loadPlayerPreferences(player);
             String glowId = dao.getActiveGlow(player.getUniqueId());
             if (glowId != null && !glowId.isEmpty()) {
                 activeGlows.put(player.getUniqueId(), glowId);
@@ -425,28 +470,58 @@ public class GlowManager {
     }
 
     private void resetGlowForPlayer(Player player) {
+        if (player == null) {
+            return;
+        }
+        
+        UUID playerUuid = player.getUniqueId();
+        
+        // Remover glow existente
         removeGlowEffect(player);
+        
+        // Resetar flag de primeira aplicação para que o próximo glow crie um novo time
+        firstGlowApplication.remove(playerUuid);
+        
+        // Limpar no packet manager (já foi feito acima no loop de observadores)
     }
 
     private void removeGlowEffect(Player player) {
         if (player == null) {
             return;
         }
-        try {
-            player.setGlowing(false);
-            String cleanName = ChatColor.stripColor(player.getName());
-            if (cleanName == null || cleanName.isEmpty()) {
-                return;
-            }
-            String teamName = playerTeamNames.get(player.getUniqueId());
-            if (teamName != null) {
-                Team team = mainScoreboard.getTeam(teamName);
-                if (team != null && team.hasEntry(cleanName)) {
-                    team.removeEntry(cleanName);
+        
+        UUID playerUuid = player.getUniqueId();
+        
+        // Remover glow usando ProtocolLib se disponível
+        if (packetManager != null) {
+            // Enviar pacotes de remoção para todos os observadores
+            for (Player observer : plugin.getServer().getOnlinePlayers()) {
+                if (observer != null && observer.isOnline() && observer.canSee(player)) {
+                    try {
+                        packetManager.removeGlow(player, observer);
+                    } catch (Exception ignored) {}
                 }
             }
-        } catch (Exception ignored) {
+        } else {
+            // Fallback: remover do scoreboard (sem enviar packets)
+            try {
+                String cleanName = ChatColor.stripColor(player.getName());
+                if (cleanName == null || cleanName.isEmpty()) {
+                    return;
+                }
+                String teamName = playerTeamNames.get(playerUuid);
+                if (teamName != null) {
+                    Team team = mainScoreboard.getTeam(teamName);
+                    if (team != null && team.hasEntry(cleanName)) {
+                        team.removeEntry(cleanName);
+                    }
+                }
+            } catch (Exception ignored) {
+            }
         }
+        
+        // Limpar flag de primeira aplicação
+        firstGlowApplication.remove(playerUuid);
     }
 
     public void reload() {
@@ -462,7 +537,12 @@ public class GlowManager {
         activeGlows.clear();
         playerTeamNames.clear();
         teamNameGenerator.clear();
-        nickColorCache.clear();
+        firstGlowApplication.clear();
+
+        // Desregistrar o listener do ProtocolLib
+        if (packetManager != null) {
+            packetManager.shutdown();
+        }
     }
 
     private String getGlowDisplayName(String glowId) {
